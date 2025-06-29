@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:league_track/widgets/cusotm_save_button.dart';
 import 'package:league_track/widgets/custom_text_field.dart';
 import 'package:league_track/widgets/custom_title.dart';
 import 'package:league_track/widgets/match_result_selector.dart';
@@ -21,6 +22,7 @@ class _AddMatchBodyState extends State<AddMatchBody> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
       child: ListView(
+       shrinkWrap: true,
         children: [
           const CustomTitle(title: "Add Match Result"),
           const SizedBox(height: 20),
@@ -51,6 +53,11 @@ class _AddMatchBodyState extends State<AddMatchBody> {
               });
             },
           ),
+          SizedBox(height: 60,),
+          CusotmSaveButton(onTap: ()
+          {
+            
+          },)
         ],
       ),
     );
