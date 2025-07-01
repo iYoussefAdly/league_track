@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:league_track/widgets/add_match_body.dart';
+import 'package:league_track/models/match_result.dart';
 class MatchResultSelector extends StatelessWidget {
   final MatchResult? selectedResult;
   final Function(MatchResult?) onChanged;

@@ -1,0 +1,1 @@
+enum MatchResult { teamAWon, draw, teamBWon }

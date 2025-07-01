@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:league_track/cubits/cubit/standings_cubit.dart';
+import 'package:league_track/models/match_result.dart';
 import 'package:league_track/widgets/cusotm_save_button.dart';
 import 'package:league_track/widgets/custom_text_field.dart';
 import 'package:league_track/widgets/custom_title.dart';
 import 'package:league_track/widgets/match_result_selector.dart';
 import 'package:league_track/widgets/vs_row_widget.dart';
-
-enum MatchResult { teamAWon, draw, teamBWon }
 
 class AddMatchBody extends StatefulWidget {
   const AddMatchBody({super.key});
@@ -16,13 +17,15 @@ class AddMatchBody extends StatefulWidget {
 
 class _AddMatchBodyState extends State<AddMatchBody> {
   MatchResult? result;
+  String? teamA;
+  String? teamB;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
       child: ListView(
-       shrinkWrap: true,
+        shrinkWrap: true,
         children: [
           const CustomTitle(title: "Add Match Result"),
           const SizedBox(height: 20),
@@ -30,7 +33,9 @@ class _AddMatchBodyState extends State<AddMatchBody> {
           const Text('Team A'),
           CustomTextField(
             hintText: 'Enter Team A',
-            onChanged: (value) {},
+            onChanged: (value) {
+              teamA = value;
+            },
           ),
           const SizedBox(height: 30),
 
@@ -40,7 +45,9 @@ class _AddMatchBodyState extends State<AddMatchBody> {
           const Text('Team B'),
           CustomTextField(
             hintText: 'Enter Team B',
-            onChanged: (value) {},
+            onChanged: (value) {
+              teamB = value;
+            },
           ),
           const SizedBox(height: 25),
 
@@ -53,11 +60,32 @@ class _AddMatchBodyState extends State<AddMatchBody> {
               });
             },
           ),
-          SizedBox(height: 60,),
-          CusotmSaveButton(onTap: ()
-          {
-            
-          },)
+          const SizedBox(height: 60),
+
+          CusotmSaveButton(
+            onTap: () {
+              if (teamA != null &&
+                  teamB != null &&
+                  teamA!.isNotEmpty &&
+                  teamB!.isNotEmpty &&
+                  result != null) {
+                BlocProvider.of<StandingsCubit>(context).addMatchResult(
+                  teamA: teamA!,
+                  teamB: teamB!,
+                  result: result!,
+                );
+
+                // Optional: رجّع المستخدم لصفحة الترتيب بعد الإضافة
+                Navigator.pop(context);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please fill all fields and select result'),
+                  ),
+                );
+              }
+            },
+          ),
         ],
       ),
     );
