@@ -10,7 +10,7 @@ import 'package:league_track/screens/standings_view.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TeamModelAdapter());
-  await Hive.openBox(kTeamBox);
+ await Hive.openBox<TeamModel>(kTeamBox); 
 
   runApp(const LeagueTrack());
 }

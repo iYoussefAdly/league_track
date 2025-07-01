@@ -9,6 +9,7 @@ part 'standings_state.dart';
 
 class StandingsCubit extends Cubit<StandingsState> {
   StandingsCubit() : super(StandingsInitial());
+
   void addMatchResult({
     required String teamA,
     required String teamB,
@@ -19,6 +20,7 @@ class StandingsCubit extends Cubit<StandingsState> {
     TeamModel? teamAModel;
     TeamModel? teamBModel;
 
+    // نجيب الفريقين لو موجودين
     for (var team in teamsBox.values) {
       if (team.teamName == teamA) teamAModel = team;
       if (team.teamName == teamB) teamBModel = team;
@@ -44,14 +46,19 @@ class StandingsCubit extends Cubit<StandingsState> {
     } else {
       teamBModel.save();
     }
-    emit(StandingsUpdated());
+    getTeams();
   }
+
   void getTeams() {
-  final box = Hive.box<TeamModel>(kTeamBox);
-  List<TeamModel> teams = box.values.toList();
-  teams.sort((a, b) => b.points.compareTo(a.points));
+    final box = Hive.box<TeamModel>(kTeamBox);
+    List<TeamModel> teams = box.values.toList();
+    teams.sort((a, b) => b.points.compareTo(a.points));
+    emit(StandingsLoaded(teams));
+  }
 
-  emit(StandingsLoaded(teams));
-}
-
+  void clearAllTeams() async {
+    final box = Hive.box<TeamModel>(kTeamBox);
+    await box.clear();
+    emit(StandingsLoaded([]));
+  }
 }
